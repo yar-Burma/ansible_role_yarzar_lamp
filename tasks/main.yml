@@ -1,0 +1,36 @@
+---
+# tasks file for yarzar_lamp
+
+- name: Install Apache and related packages
+  ansible.builtin.package:
+    name: "{{ packages }}"
+    state: present
+    
+- name: Start and enable Apache and MariaDB services
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  loop: "{{ services }}"  
+
+- name: Enable HTTP and HTTPS services in the firewall
+  ansible.posix.firewalld:
+    service: "{{ item }}"
+    state: enabled
+    permanent: true
+    immediate: true
+  loop: "{{ firewall_services }}"
+
+- name: Create a PHP info page for testing
+  ansible.builtin.copy:
+    dest: /var/www/html/info.php
+    content: "<?php phpinfo(); ?>"
+  
+    notify:
+      
+      - Restart httpd service
+      
+- name: Deploy web files
+  ansible.builtin.copy:
+      src: "/root/yaml/yarzar_lamp/files/"
+      dest: "/var/www/html/"
