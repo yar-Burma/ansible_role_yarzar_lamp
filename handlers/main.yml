@@ -1,0 +1,12 @@
+---
+# handlers file for yarzar_lamp
+
+- name: Deploy web files
+  ansible.builtin.copy:
+    src: "/root/yaml/yarzar_lamp/files/"
+    dest: "/var/www/html/"
+    
+- name: Restart httpd service
+  ansible.builtin.service:
+    name: httpd
+    state: restarted

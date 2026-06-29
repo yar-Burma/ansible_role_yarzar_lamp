@@ -1,0 +1,15 @@
+---
+# vars file for yarzar_lamp
+
+packages:
+  - httpd
+  - mariadb-server
+  - php
+  - php-mysqlnd
+  - php-cli
+services:
+  - httpd
+  - mariadb
+firewall_services:
+  - http
+  - https
